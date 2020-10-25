@@ -12,7 +12,7 @@
                            @(:items @*current-room*)))))
 
 (defn move
-  "\"♬ We gotta get out of this place... ♪\" Give a direction."
+  "\"♬ We gotta get out of this place... ♪\" Give a direction. PENIUS"
   [direction]
   (dosync
    (let [target-name ((:exits @*current-room*) (keyword direction))
