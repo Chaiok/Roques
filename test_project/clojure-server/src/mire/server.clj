@@ -15,16 +15,19 @@
    (commute (:inhabitants @*current-room*)
             disj *player-name*)))
 
+(def i 1)
+
 (defn- mire-handle-client [in out]
   (binding [*in* (reader in)
             *out* (writer out)]
-
     ;; We have to nest this in another binding call instead of using
     ;; the one above so *in* and *out* will be bound to the socket
-    (print "\nWhat is your name? ") (flush)
+    (println (format "%s\nWhat is your name? " i)) (flush)
     (binding [*player-name* (read-line)
               *current-room* (ref (rooms :start))
-              *inventory* (ref #{})]
+              *inventory* (ref #{})
+              *id* i]
+      (def i (+ i 1))
       (dosync (commute (:inhabitants @*current-room*) conj *player-name*))
 
       (println (look)) (print prompt) (flush)
