@@ -26,7 +26,13 @@
     (binding [*player-name* (read-line)
               *current-room* (ref (rooms :start))
               *inventory* (ref #{})
-              *id* i]
+              *id* i
+              *x* 300
+              *y* 400
+              *up* false
+              *down* false
+              *left* false
+              *right* false]
       (def i (+ i 1))
       (dosync (commute (:inhabitants @*current-room*) conj *player-name*))
 

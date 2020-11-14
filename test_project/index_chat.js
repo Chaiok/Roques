@@ -8,7 +8,7 @@ const net = require('net');
 
 app.set('view engine', 'ejs');
 app.get('/', function (req, res) {
-    res.render('form');
+    res.render('form_chat');
 });
 
 io.on('connection', function (socket) {
@@ -29,7 +29,8 @@ io.on('connection', function (socket) {
     })
     client.on('data', function (data) {
         console.log('Reciived: ' + data);
-        io.sockets.emit('add mess', { msg: data });
+        //io.sockets.emit('add mess', { msg: data }); //отправляет сообщение всей группе сокетов
+        socket.emit('add mess', { msg: data }); //отправляет сообщение одному сокету
     })
     client.on('close', function () {
         console.log('Connection cloce');

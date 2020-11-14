@@ -5,6 +5,12 @@
 (def *inventory*)
 (def *player-name*)
 (def *id*)
+(def *x*)
+(def *y*)
+(def *up*)
+(def *down*)
+(def *left*)
+(def *right*)
 
 (defn carrying?
   [thing]

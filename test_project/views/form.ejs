@@ -4,6 +4,12 @@
 <head>
     <meta charset="utf-8" />
     <style>
+        canvas {
+            width: 800px;
+            height: 600px;
+            border: 5px solid black;
+        }
+
         #background {
             background-color: rgba(242, 0, 255, 1);
         }
@@ -178,6 +184,7 @@
 </head>
 
 <body>
+    <canvas id="canvas"></canvas>
     <main id="background">
         <br />
         <div class="forma">
@@ -193,7 +200,7 @@
                 <script src="/socket.io/socket.io.js"></script>
                 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
                 <script>
-                    $(function () {
+                    /*$(function () {
                         var socket = io();
                         var $all_messages = $("#all_mess");
                         $('form').submit(function () {
@@ -207,10 +214,11 @@
                             //$('#otvet').val(per);
                             $all_messages.append("<div >" + per + "</div>");
                         })
-                    });
+                    });*/
                 </script>
             </div>
         </div>
     </main>
+    <script src="/game.js"></script>
 </body>
 <html>
