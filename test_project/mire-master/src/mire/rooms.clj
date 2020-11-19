@@ -1,6 +1,6 @@
 (ns mire.rooms)
 
-(declare rooms)
+(def rooms (ref {}))
 
 (defn load-room [rooms file]
   (let [room (read-string (slurp (.getAbsolutePath file)))]
@@ -12,19 +12,20 @@
             :items (ref (or (:items room) #{}))
             :inhabitants (ref #{})}})))
 
-(defn load-rooms [dir]
+(defn load-rooms
   "Given a dir, return a map with an entry corresponding to each file
-in it. Files should be maps containing room data."
-  (reduce load-room {} (.listFiles (java.io.File. dir))))
+  in it. Files should be maps containing room data."
+  [rooms dir]
+  (dosync
+   (reduce load-room rooms
+           (.listFiles (java.io.File. dir)))))
 
-(defn set-rooms
-  "Set mire.rooms/rooms to a map of rooms corresponding to each file
-  in dir. This function should be used only once at mire startup, so
-  having a def inside the function body should be OK. Defaults to
-  looking in data/rooms/."
-  ([dir]
-     (def rooms (load-rooms dir)))
-  ([] (set-rooms "data/rooms/")))
+(defn add-rooms
+  "Look through all the files in a dir for files describing rooms and add
+  them to the mire.rooms/rooms map."
+  [dir]
+  (dosync
+   (alter rooms load-rooms dir)))
 
 (defn room-contains?
   [room thing]
