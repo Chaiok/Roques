@@ -2,7 +2,7 @@
 (:require [clojure.java.io :as io]
           [server.socket :as socket]))
 
-(def port (* 4 1111))
+(def port (* 5 1111))
 (def prompt "> ")
 
 (defn mire-handle-client [in out]

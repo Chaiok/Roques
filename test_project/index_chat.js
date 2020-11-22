@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
     console.log('a user connected');
     var client = new net.Socket();
-    client.connect(3333, 'localhost', function () {
+    client.connect(5555, 'localhost', function () {
         console.log('Connected');
     })
     //console.log(socket);
