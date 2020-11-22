@@ -3,3 +3,4 @@ npm install ejs --save
 npm install socket.io
 npm install express
 ./lein.bat self-install
+lein run запускает сервер
