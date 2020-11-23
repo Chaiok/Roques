@@ -12,7 +12,19 @@ app.use(express.static('public'));
 app.get('/', function (req, res) {
     res.render('form');
 });
-
+//server
+client.connect(3333, 'localhost', function () {
+    console.log('Connected to server');
+    client.write("alldate" + "\n");
+})
+client.on('data', function (data) {
+    console.log('Reciived server: ' + data);
+})
+client.on('close', function () {
+    console.log('Connection server cloce');
+    socket.disconnect(true);
+})
+//players
 var players = {};
 var stateplayers = {};
 io.on('connection', function (socket) {
