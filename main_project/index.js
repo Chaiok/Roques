@@ -13,39 +13,27 @@ app.get('/', function (req, res) {
     res.render('form');
 });
 //server
-client.connect(3333, 'localhost', function () {
+var client = new net.Socket();
+client.connect(8884, 'localhost', function () {
     console.log('Connected to server');
-    client.write("alldate" + "\n");
 })
 client.on('data', function (data) {
-    console.log('Reciived server: ' + data);
+    //console.log('Reciived server: ' + data);
+    io.sockets.emit('state', { msg: data })
 })
 client.on('close', function () {
     console.log('Connection server cloce');
-    socket.disconnect(true);
 })
 //players
 var players = {};
 var stateplayers = {};
 io.on('connection', function (socket) {
     console.log('a user connected');
-    var client = new net.Socket();
-    /* //временно отключим сервер на клодже
-    client.connect(3333, 'localhost', function () {
-        console.log('Connected');
-    })
-    */
-    socket.on('chat message', function (data) {
-        console.log('message: ' + data);
-        //client.write(data + "\n");
-    });
-    socket.on('disconnect', function () {
-        console.log('Socket close');
-        //client.destroy();
 
-        //game функция
-        delete players[socket.id];
-        delete stateplayers[socket.id];
+    var client = new net.Socket();
+
+    client.connect(6663, 'localhost', function () {
+        console.log('Connected');
     })
     client.on('data', function (data) {
         console.log('Reciived: ' + data);
@@ -56,6 +44,20 @@ io.on('connection', function (socket) {
         console.log('Connection cloce');
         socket.disconnect(true);
     })
+
+    socket.on('chat message', function (data) {
+        console.log('message: ' + data);
+        client.write(data + "\n");
+    });
+    socket.on('disconnect', function () {
+        console.log('Socket close');
+        client.destroy();
+
+        //game функция
+        //delete players[socket.id];
+        //delete stateplayers[socket.id];
+    })
+    /*
     //game функции
     players[socket.id] = {
         x: 300,
@@ -73,7 +75,10 @@ io.on('connection', function (socket) {
         stateplayers[socket.id].left = data.left;
         stateplayers[socket.id].right = data.right;
     });
+    */
 });
+/*
+//game
 //передает всем в game данные игрокам
 setInterval(function () {
     io.sockets.emit('state', players);
@@ -97,6 +102,7 @@ setInterval(function () {
     }
     lastUpdateTime = currentTime;
 }, 1000 / 60);
+*/
 
 server.listen(PORT, function (error) {
     if (error) {

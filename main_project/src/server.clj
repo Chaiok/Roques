@@ -3,21 +3,25 @@
           [server.socket :as socket]
           [player :as player]))
 
-(def port (* 2 2122))
-(def sideport (* 3 2122))
+(def port (* 3 2221))
+(def sideport (* 4 2221))
 (def i 1)
 
 (defn mire-handle-client [in out]
   (binding [*in* (io/reader in)
             *out* (io/writer out)
             *err* (io/writer System/err)]
-  ;(print "\nWhat is your name? ") (flush)
    (binding [
             player/*id* i
-            player/*x* 300
+            player/*x* (* i 100)
             player/*y* 300
             ]
-            (def i (+ i 1))
+    (def i (+ i 1))
+    (dosync
+    (commute player/streams assoc (str "player" player/*id* ":") ;player/*x*))
+    {"x:" player/*x* "y:" player/*y*}))
+    ;(print (commute player/streams assoc player/*id* {"x" player/*x* "y" player/*y*}))(flush))
+       ;(commute player/streams assoc player/*id* *out*))
        (try (loop [input (read-line)]
              (when input
                (print input)
@@ -29,15 +33,9 @@
   (binding [*in* (io/reader in)
             *out* (io/writer out)
             *err* (io/writer System/err)]
-  ;(print "\nWhat is your name? ") (flush)
-       (try (loop [input (read-line)]
-             (when input
-               (print input)
-               (.flush *err*) 
-               (flush)
-               (recur (read-line)))))))
-
-
+    (dosync (print (commute player/streams merge nil))(flush))
+       (loop [] (dosync (print (commute player/streams merge nil))(flush)) (Thread/sleep 20) (recur))
+))
 
 (defn -main [& args]
 (println "hello")

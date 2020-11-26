@@ -5,3 +5,4 @@
 (def ^:dynamic *y*)
 
 (def streams (ref {}))
+(def streamsinfo (deref streams))
