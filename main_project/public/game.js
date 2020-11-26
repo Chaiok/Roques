@@ -12,6 +12,7 @@ socket.on('add mess', function (data) {
     $all_messages.append("<div >" + per + "</div>");
 });
 //game функции
+/*
 var movement = {
     up: false,
     down: false,
@@ -53,6 +54,20 @@ document.addEventListener('keyup', function (event) {
 setInterval(function () {
     socket.emit('movement', movement);
 }, 1000 / 60);
+*/
+class Formate {
+    string = "{}";
+    regExp = /"?(\w+)"?\s*:\s*({.*?|".*?"|\w+)/ig;
+
+    constructor(string) {
+        this.string = string;
+    }
+
+    get validJSON() {
+        return JSON.parse(this.string.replace(this.regExp, '"$1": $2'));
+    }
+}
+
 //обработка графики и state
 var canvas = document.getElementById('canvas');
 canvas.width = 800;
@@ -61,10 +76,22 @@ var context = canvas.getContext('2d');
 socket.on('state', function (players) {
     context.clearRect(0, 0, 800, 600);
     context.fillStyle = 'green';
-    for (var id in players) {
-        var player = players[id];
+    var decoder = new TextDecoder("utf-8");
+    var per = decoder.decode(new Uint8Array(players.msg));
+    //console.log("per:" + per);
+
+    const value = new Formate(per);
+    //console.log(value.validJSON);
+    var obj = value.validJSON;
+    //console.log(obj);
+    for (var key in obj) {
+        //console.log(key, obj[key])
+        for (var coord in obj[key]) {
+            //console.log(coord, obj[key][coord])
+        }
         context.beginPath();
-        context.arc(player.x, player.y, 10, 0, 2 * Math.PI);
+        context.arc(obj[key].x, obj[key].y, 10, 0, 2 * Math.PI);
         context.fill();
     }
+
 });
