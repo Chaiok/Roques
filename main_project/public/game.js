@@ -12,7 +12,6 @@ socket.on('add mess', function (data) {
     $all_messages.append("<div >" + per + "</div>");
 });
 //game функции
-/*
 var movement = {
     up: false,
     down: false,
@@ -52,9 +51,9 @@ document.addEventListener('keyup', function (event) {
     }
 });
 setInterval(function () {
-    socket.emit('movement', movement);
+    //socket.emit('movement', movement);
 }, 1000 / 60);
-*/
+
 class Formate {
     string = "{}";
     regExp = /"?(\w+)"?\s*:\s*({.*?|".*?"|\w+)/ig;
@@ -78,7 +77,7 @@ socket.on('state', function (players) {
     context.fillStyle = 'green';
     var decoder = new TextDecoder("utf-8");
     var per = decoder.decode(new Uint8Array(players.msg));
-    //console.log("per:" + per);
+    console.log("per:" + per);
 
     const value = new Formate(per);
     //console.log(value.validJSON);

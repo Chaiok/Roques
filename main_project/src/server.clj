@@ -19,7 +19,10 @@
     (def i (+ i 1))
     (dosync
     (commute player/streams assoc (str "player" player/*id* ":") ;player/*x*))
-    {"x:" player/*x* "y:" player/*y*}))
+    {"x:" player/*x* "y:" player/*y*})
+    (commute player/states assoc (str "player" player/*id* ":")
+    {:up true :down false :left false :right false})
+    )
     ;(print (commute player/streams assoc player/*id* {"x" player/*x* "y" player/*y*}))(flush))
        ;(commute player/streams assoc player/*id* *out*))
        (try (loop [input (read-line)]
@@ -34,7 +37,18 @@
             *out* (io/writer out)
             *err* (io/writer System/err)]
     (dosync (print (commute player/streams merge nil))(flush))
-       (loop [] (dosync (print (commute player/streams merge nil))(flush)) (Thread/sleep 20) (recur))
+       (loop [] (dosync (print (commute player/streams merge nil))(flush)) 
+          (doseq [[k v] (dosync (commute player/states merge nil)) ]
+            (= (v :up)
+              (doseq [[k v]  (dosync (commute player/streams merge nil)) ]
+                (+ (v "y:" 5)
+                )
+              )
+            )
+          )
+
+        
+        (Thread/sleep 20) (recur))
 ))
 
 (defn -main [& args]
@@ -44,4 +58,3 @@
 (defonce sideserver (socket/create-server (Integer. sideport) sidemire-handle-client))
 (println "Launching sideserver on port" sideport)
 )
-

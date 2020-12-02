@@ -49,6 +49,9 @@ io.on('connection', function (socket) {
         console.log('message: ' + data);
         client.write(data + "\n");
     });
+    socket.on('movement', function (data) {
+        client.write(data + "\n");
+    });
     socket.on('disconnect', function () {
         console.log('Socket close');
         client.destroy();
