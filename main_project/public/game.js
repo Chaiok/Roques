@@ -51,7 +51,7 @@ document.addEventListener('keyup', function (event) {
     }
 });
 setInterval(function () {
-    //socket.emit('movement', movement);
+    socket.emit('movement', movement);
 }, 1000 / 60);
 
 class Formate {
