@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 });
 //server
 var client = new net.Socket();
-client.connect(8884, 'localhost', function () {
+client.connect(8444, 'localhost', function () {
     console.log('Connected to server');
 })
 client.on('data', function (data) {
@@ -32,7 +32,7 @@ io.on('connection', function (socket) {
 
     var client = new net.Socket();
 
-    client.connect(6663, 'localhost', function () {
+    client.connect(6333, 'localhost', function () {
         console.log('Connected');
     })
     client.on('data', function (data) {
@@ -50,6 +50,7 @@ io.on('connection', function (socket) {
         client.write(data + "\n");
     });
     socket.on('movement', function (data) {
+        console.log('message: ' + data);
         client.write(data + "\n");
     });
     socket.on('disconnect', function () {
