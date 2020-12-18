@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <style>
+        #background {
+            background-color: rgba(242, 0, 255, 1);
+        }
+
+        #shapa {
+            border: 1px solid black;
+            background: rgba(255, 0, 0, 0.3);
+            text-align: left;
+            font: normal small-caps 52px/54px fantasy;
+            height: 32mm;
+            max-height: 200px;
+            line-height: 100px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        #main {
+            border: 1px solid black;
+            background: rgba(0, 0, 255, 0.3);
+            text-align: left;
+            font: bold italic 110% serif;
+        }
+
+        #list {
+            border: 1px solid black;
+            margin: 0 auto;
+            background: rgba(255, 128, 128, 0.5);
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding: 30px;
+            padding-left: 150 pt;
+        }
+
+        #forma {
+            border: 1px solid black;
+            margin: 0 auto;
+            background: rgba(255, 0, 0, 0.4);
+            margin-top: 15px;
+            margin-bottom: 15px;
+            padding: 30px;
+            padding-left: 150 pt;
+        }
+
+        #foot {
+            border: 1px solid black;
+            background: rgba(255, 126, 0, 0.40);
+            text-align: left;
+            font: normal small-caps 52px/54px fantasy;
+            height: 32mm;
+            line-height: 100px;
+            max-height: 200px;
+        }
+
+        /*таблица*/
+        .lux {
+            width: 300px;
+            border: 1px solid #a52a2a;
+            border-collapse: collapse;
+            border-spacing: 0;
+            text-align: center;
+            margin: auto;
+        }
+
+        .lux th {
+            background: rgba(144, 32, 230, 1);
+            color: white;
+        }
+
+        .lux td {
+            border-bottom: 1px solid black;
+        }
+
+        .lux td,
+        .lux th {
+            padding: 4px;
+        }
+
+        .caption {
+            caption-side: top;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(255, 0, 200, 1);
+        }
+
+        tr:nth-child(odd) {
+            background: rgba(244, 117, 255, 1);
+        }
+
+        /* Flex box зона */
+        .flex {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list,
+        .table,
+        .forma {
+            margin: 20px;
+        }
+
+        .list {
+            order: 0;
+        }
+
+        .table {
+            order: 2;
+        }
+
+        .forma {
+            order: 1;
+        }
+
+        .flexer {
+            display: flex;
+            flex-direction: row;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 991.98px) {
+            #list {
+                max-width: 600px;
+            }
+
+            #main {
+                max-width: 400px;
+                text-align: center;
+                margin: 0 auto;
+                margin-top: 15px;
+                padding: 10px;
+                word-spacing: 30px;
+                word-wrap: inherit;
+            }
+
+            #forma {
+                max-width: 600px;
+            }
+
+            nav {
+                flex-direction: row;
+            }
+
+            .flexer {
+                display: flex;
+                flex-direction: column;
+                margin: 0 auto;
+
+            }
+
+            .table {
+                order: 1;
+            }
+
+            .forma {
+                order: 2;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main id="background">
+        <br />
+        <div class="forma">
+            <div id="list">
+                <h2 id="forma">Чат с сервером</h2>
+                <form action="">
+                    <input id="m" autocomplete="off" /><button>Send</button>
+                </form>
+                <h2 id="forma">Ответ сервера</h2>
+                <div class="col-6">
+                    <div id="all_mess"></div>
+                </div>
+                <script src="/socket.io/socket.io.js"></script>
+                <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+                <script>
+                    $(function () {
+                        var socket = io();
+                        var $all_messages = $("#all_mess");
+                        $('form').submit(function () {
+                            socket.emit('chat message', $('#m').val());
+                            $('#m').val('');
+                            return false;
+                        });
+                        socket.on('add mess', function (data) {
+                            var decoder = new TextDecoder("utf-8");
+                            var per = decoder.decode(new Uint8Array(data.msg));
+                            //$('#otvet').val(per);
+                            $all_messages.append("<div >" + per + "</div>");
+                        })
+                    });
+                </script>
+            </div>
+        </div>
+    </main>
+</body>
+<html>

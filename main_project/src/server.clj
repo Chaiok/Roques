@@ -2,13 +2,12 @@
 (:require [clojure.java.io :as io]
           [server.socket :as socket]
           [player :as player]
-          [commands :as commands]))
+          [commands :as commands]
+          [clojure.string :as str]))
 
-(def port (* 3 2111))
-(def sideport (* 4 2111))
+(def port (* 3 1111))
+(def sideport (* 4 1111))
 (def i 1)
-(def XX 1)
-(def YY 1)
 
 (defn mire-handle-client [in out]
   (binding [*in* (io/reader in)
@@ -31,8 +30,8 @@
        (try (loop [input (read-line)]
              (when input
                ;;(print input)
-               (flush)
-               (commands/execute input)
+               ;;(flush)
+               (commands/execute input player/*id*)
                (.flush *err*) 
                (recur (read-line))))))))
 
@@ -42,84 +41,52 @@
             *err* (io/writer System/err)]
     (dosync (print (commute player/streams merge nil))(flush))
        (loop [] (dosync (print (commute player/streams merge nil))(flush)) 
-       (dosync
-          (doseq [[k v] (commute player/states merge nil) ]
-            (doseq [[kkk vvv] v ]
+          (def per {})
+          (doseq [[k v] (dosync (commute player/states merge nil)) ]
+            ;(print k)(flush)
+            (def XX)
+            (def YY)
+            (doseq [[kk vv] (dosync (commute player/streams get k)) ] 
+              (if (= kk "y:")
+                (def YY vv)
+              )
+              (if (= kk "x:")
+                (def XX vv)
+              )
+            )
+            (doseq [[kk vv] v ]
               ;;up
-              (if (= kkk :up)
-                (if (= vvv true)
-                  (doseq [[k v] (commute player/streams merge nil) ]
-                    (doseq [[kk vv] v ]
-                      (if (= kk "y:")
-                        (def YY (- vv 5))
-                      )
-                      (if (= kk "x:")
-                        (def XX vv)
-                      )
-                    )
-                    (commute player/streams assoc k
-                      {"x:" XX "y:" YY}
-                    )
-                  )
+              (if (= kk :up)
+                (if (= vv true)
+                  (def YY (- YY 5))
                 )
               )
               ;;down
-              (if (= kkk :down)
-                (if (= vvv true)
-                  (doseq [[k v] (commute player/streams merge nil) ]
-                    (doseq [[kk vv] v ]
-                      (if (= kk "y:")
-                        (def YY (+ vv 5))
-                      )
-                      (if (= kk "x:")
-                        (def XX vv)
-                      )
-                    )
-                    (commute player/streams assoc k
-                      {"x:" XX "y:" YY}
-                    )
-                  )
+              (if (= kk :down)
+                (if (= vv true)
+                  (def YY (+ YY 5))
                 )
               )
               ;;left
-              (if (= kkk :left)
-                (if (= vvv true)
-                  (doseq [[k v] (commute player/streams merge nil) ]
-                    (doseq [[kk vv] v ]
-                      (if (= kk "y:")
-                        (def YY vv)
-                      )
-                      (if (= kk "x:")
-                        (def XX (- vv 5))
-                      )
-                    )
-                    (commute player/streams assoc k
-                      {"x:" XX "y:" YY}
-                    )
-                  )
+              (if (= kk :left)
+                (if (= vv true)
+                  (def XX (- XX 5))
                 )
               )
               ;;right
-              (if (= kkk :right)
-                (if (= vvv true)
-                  (doseq [[k v] (commute player/streams merge nil) ]
-                    (doseq [[kk vv] v ]
-                      (if (= kk "y:")
-                        (def YY vv)
-                      )
-                      (if (= kk "x:")
-                        (def XX (+ vv 5))
-                      )
-                    )
-                    (commute player/streams assoc k
-                      {"x:" XX "y:" YY}
-                    )
-                  )
+              (if (= kk :right)
+                (if (= vv true)
+                  (def XX (+ XX 5))
                 )
               )
             )
+            ;(print (str "player" (str/replace (str/replace k #":" "") #"player" "") ":") {"x:" XX "y:" YY})
+            (dosync (commute player/streams assoc k {"x:" XX "y:" YY}))
+            ;(dosync (commute player/streams assoc (str "player" (str/replace (str/replace k #":" "") #"player" "") ":") {"x:" XX "y:" YY}))
+            ;(commute player/streams assoc 2 "February")
+            ;(assoc per (str "player" (str/replace (str/replace k #":" "") #"player" "") ":") {"x:" XX "y:" YY})
+            ;(print {(str "player" (str/replace (str/replace k #":" "") #"player" "") ":") {"x:" XX "y:" YY}})(flush)
           ) 
-        )      
         (Thread/sleep 20) (recur))
 ))
 
