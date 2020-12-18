@@ -7,5 +7,7 @@
                   [server-socket "1.0.0"]
                   [ajchemist/boot-figwheel "0.5.4-SNAPSHOT"]
                   [org.clojure/data.json "1.0.0"]
+                  ;[org.clojure/clojure-contrib "1.2.0"]
+                  ;[cheshire "5.10.0"]
                 ]
 )

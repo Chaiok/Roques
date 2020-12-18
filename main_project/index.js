@@ -14,11 +14,11 @@ app.get('/', function (req, res) {
 });
 //server
 var client = new net.Socket();
-client.connect(8444, 'localhost', function () {
+client.connect(4444, 'localhost', function () {
     console.log('Connected to server');
 })
 client.on('data', function (data) {
-    //console.log('Reciived server: ' + data);
+    console.log('Reciived server: ' + data);
     io.sockets.emit('state', { msg: data })
 })
 client.on('close', function () {
@@ -32,7 +32,7 @@ io.on('connection', function (socket) {
 
     var client = new net.Socket();
 
-    client.connect(6333, 'localhost', function () {
+    client.connect(3333, 'localhost', function () {
         console.log('Connected');
     })
     client.on('data', function (data) {
@@ -50,8 +50,8 @@ io.on('connection', function (socket) {
         client.write(data + "\n");
     });
     socket.on('movement', function (data) {
-        console.log('message: ' + data);
-        client.write(data + "\n");
+        console.log('message: ' + JSON.stringify(data));
+        client.write( JSON.stringify(data) + "\n");
     });
     socket.on('disconnect', function () {
         console.log('Socket close');
