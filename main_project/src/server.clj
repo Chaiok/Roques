@@ -9,10 +9,6 @@
 (def sideport (* 4 1112))
 (def i 1)
 
-(defn atata []
-
-)
-
 (defn mire-handle-client [in out]
   (binding [*in* (io/reader in)
             *out* (io/writer out)
@@ -28,9 +24,8 @@
             ]
     (def i (+ i 1))
     (dosync
-      (commute player/streams assoc (str "player" player/*id* ":") ;player/*x*))
+      (commute player/streams assoc (str "player" player/*id* ":")
       {"x:" player/*x* "y:" player/*y*})
-
       (commute player/states assoc (str "player" player/*id* ":")
       {:up false :down false :left false :right false})
     )
