@@ -29,26 +29,24 @@
       (commute player/states assoc (str "player" player/*id* ":")
       {:up false :down false :left false :right false})
     )
-    (let  [p  (-> (
-                    (loop [] 
-          (commands/moving) 
-          (Thread/sleep 20) (recur)
-        )
-                  )
-                future
-              )
-          ]
+
+    (let [p (-> (
+          (loop [] 
+            (commands/moving) 
+            (Thread/sleep 100) (recur)
+          )
+        ) future )]
     (-> 
       (
         (loop []
-                      (let [input (read-line)]
-                        (when input
-                          (commands/execute input)
-                          (.flush *err*) 
-                        )
-                      )
-                      (recur)
-                    )
+          (let [input (read-line)]
+            (when input
+              (commands/execute input)
+              (.flush *err*) 
+            )
+          )
+          (recur)
+        )
       )
     ))
 )))

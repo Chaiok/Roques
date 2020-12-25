@@ -5,10 +5,8 @@
   )
 )
 
-
 (defn first-args [& args]
   (first args))
-
 
 ;Command functions
 (defn execute [input]
@@ -20,12 +18,39 @@
 
 (defn moving  []
   (dosync
-    (let [playerid
+    (let [playerid (str "player" player/*id* ":")
           x (get (@player/streams playerid) "x:")
           y (get (@player/streams playerid) "y:")
-          x1 (inc x)
-          y1 (inc y)]
-      (commute player/streams assoc (str "player" player/*id* ":") {"x:" x1 "y:" y1})
+          up (get (@player/states playerid) :up)
+          down (get (@player/states playerid) :down)
+          left (get (@player/states playerid) :left)
+          right (get (@player/states playerid) :right)
+        ]
+      (if (= up true)
+        (if (= left true) 
+          (commute player/streams assoc playerid {"x:" (- x 5) "y:" (- y 5)}) 
+          (if (= right true) 
+            (commute player/streams assoc playerid {"x:" (+ x 5) "y:" (- y 5)})  
+            (commute player/streams assoc playerid {"x:" x "y:" (- y 5)}) 
+          )
+        )
+        (if (= down true) 
+          (if (= left true) 
+            (commute player/streams assoc playerid {"x:" (- x 5) "y:" (+ y 5)}) 
+            (if (= right true) 
+              (commute player/streams assoc playerid {"x:" (+ x 5) "y:" (+ y 5)})  
+              (commute player/streams assoc playerid {"x:" x "y:" (+ y 5)}) 
+            )
+          ) 
+          (if (= left true) 
+            (commute player/streams assoc playerid {"x:" (- x 5) "y:" y}) 
+            (if (= right true) 
+              (commute player/streams assoc playerid {"x:" (+ x 5) "y:" y})  
+              (commute player/streams assoc playerid {"x:" x "y:" y}) 
+            )
+          ) 
+        )
+      )
     )
   )
 )
