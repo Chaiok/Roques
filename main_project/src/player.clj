@@ -10,6 +10,6 @@
 (def ^:dynamic *left*)
 (def ^:dynamic *right*)
 
-(def streams (ref {"red:" {}}))
+(def streams (ref {"red:" {} "block:" {}} ))
 (def states (ref {}))
 (def streamsinfo (deref streams))

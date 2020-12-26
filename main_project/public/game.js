@@ -87,18 +87,26 @@ socket.on('state', function (players) {
         for (var coord in obj[key]) {
             //console.log(coord, obj[key][coord])
         }
-        if(key != "red")
+        if(key != "red" && key != "block")
         {
             context.fillStyle = 'green';
             context.beginPath();
             context.arc(obj[key].x, obj[key].y, 10, 0, 2 * Math.PI);
             context.fill();
         }
-        else {
+        else if(key == "red"){
             context.fillStyle = 'red';
             for (var redt in obj[key]) {
                 context.beginPath();
                 context.arc(obj[key][redt].x, obj[key][redt].y, 5, 0, 2 * Math.PI);
+                context.fill();
+            }
+        }
+        else {
+            context.fillStyle = 'blue';
+            for (var redt in obj[key]) {
+                context.beginPath();
+                context.rect(obj[key][redt].x, obj[key][redt].y, 30, 30);
                 context.fill();
             }
         }
