@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 });
 //server
 var client = new net.Socket();
-client.connect(4448, 'localhost', function () {
+client.connect(4444, 'localhost', function () {
     console.log('Connected to server');
 })
 client.on('data', function (data) {
@@ -32,7 +32,7 @@ io.on('connection', function (socket) {
 
     var client = new net.Socket();
 
-    client.connect(3336, 'localhost', function () {
+    client.connect(3333, 'localhost', function () {
         console.log('Connected');
     })
     client.on('data', function (data) {

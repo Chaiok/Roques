@@ -5,8 +5,8 @@
           [commands :as commands]
           [clojure.string :as str]))
 
-(def port (* 3 1112))
-(def sideport (* 4 1112))
+(def port (* 3 1111))
+(def sideport (* 4 1111))
 (def i 1)
 
 (defn mire-handle-client [in out]
@@ -32,8 +32,8 @@
 
     (let [p (-> (
           (loop [] 
-            (commands/moving) 
-            (Thread/sleep 100) (recur)
+            ;(commands/moving) 
+            (Thread/sleep 20) (recur)
           )
         ) future )]
     (-> 
@@ -55,9 +55,18 @@
   (binding [*in* (io/reader in)
             *out* (io/writer out)
             *err* (io/writer System/err)]
-      (loop [] 
-        (dosync (print (commute player/streams merge nil))(flush))   
-        (Thread/sleep 100) (recur)
+      (let [f (atom 1)]
+        (loop [] 
+          (dosync (print (commute player/streams merge nil))(flush))   
+          (commands/movingall 10) 
+          (commands/spawnred 800 600 @f) 
+          (swap! f inc)
+          (if (= @f 100)
+            (reset! f 1)
+          )
+          (Thread/sleep 20) 
+          (recur)
+        )
       )
 ))
 
