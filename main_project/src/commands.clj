@@ -15,14 +15,16 @@
       f (atom 0)
     ]
     (doseq [[k v] players]
-      (if (not= player k)
-        (let [
-            x (get v "x:")
-            y (get v "y:")
-          ]
-          (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ radius radius) (+ radius radius)))
-            (
-              swap! f inc
+      (if (not= k "red:")
+        (if (not= player k)
+          (let [
+              x (get v "x:")
+              y (get v "y:")
+            ]
+            (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ radius radius) (+ radius radius)))
+              (
+                swap! f inc
+              )
             )
           )
         )
@@ -90,48 +92,70 @@
           playerst (commute player/states merge nil)
         ]
       (doseq [[k v] players]
-        (let [
-          x (get v "x:")
-          y (get v "y:")
-          up  (get (get playerst k) :up)
-          down  (get (get playerst k) :down)
-          left  (get (get playerst k) :left)
-          right (get (get playerst k) :right)
-          ]
-          (if (= up true)
-            (if (= left true) 
-              ;(commute player/streams assoc k {"x:" (- x 5) "y:" (- y 5)}) 
-              (collision k (- x 5) (- y 5) radius)
-              (if (= right true) 
-                ;(commute player/streams assoc k {"x:" (+ x 5) "y:" (- y 5)})  
-                ;(commute player/streams assoc k {"x:" x "y:" (- y 5)}) 
-                (collision k (+ x 5) (- y 5) radius)
-                (collision k x (- y 5) radius)
+        (if (not= k "red:")
+          (let [
+            x (get v "x:")
+            y (get v "y:")
+            up  (get (get playerst k) :up)
+            down  (get (get playerst k) :down)
+            left  (get (get playerst k) :left)
+            right (get (get playerst k) :right)
+            ]
+            (if (= up true)
+              (if (= left true) 
+                ;(commute player/streams assoc k {"x:" (- x 5) "y:" (- y 5)}) 
+                (collision k (- x 5) (- y 5) radius)
+                (if (= right true) 
+                  ;(commute player/streams assoc k {"x:" (+ x 5) "y:" (- y 5)})  
+                  ;(commute player/streams assoc k {"x:" x "y:" (- y 5)}) 
+                  (collision k (+ x 5) (- y 5) radius)
+                  (collision k x (- y 5) radius)
+                )
+              )
+              (if (= down true) 
+                (if (= left true) 
+                  ;(commute player/streams assoc k {"x:" (- x 5) "y:" (+ y 5)}) 
+                  (collision k (- x 5) (+ y 5) radius)
+                  (if (= right true) 
+                    ;(commute player/streams assoc k {"x:" (+ x 5) "y:" (+ y 5)})  
+                    ;(commute player/streams assoc k {"x:" x "y:" (+ y 5)}) 
+                    (collision k (+ x 5) (+ y 5) radius)
+                    (collision k x (+ y 5) radius)
+                  )
+                ) 
+                (if (= left true) 
+                  ;(commute player/streams assoc k {"x:" (- x 5) "y:" y}) 
+                  (collision k (- x 5) y radius)
+                  (if (= right true) 
+                    ;(commute player/streams assoc k {"x:" (+ x 5) "y:" y})  
+                    ;(commute player/streams assoc k {"x:" x "y:" y}) 
+                    (collision k (+ x 5) y radius)
+                    (collision k x y radius)
+                  )
+                ) 
               )
             )
-            (if (= down true) 
-              (if (= left true) 
-                ;(commute player/streams assoc k {"x:" (- x 5) "y:" (+ y 5)}) 
-                (collision k (- x 5) (+ y 5) radius)
-                (if (= right true) 
-                  ;(commute player/streams assoc k {"x:" (+ x 5) "y:" (+ y 5)})  
-                  ;(commute player/streams assoc k {"x:" x "y:" (+ y 5)}) 
-                  (collision k (+ x 5) (+ y 5) radius)
-                  (collision k x (+ y 5) radius)
-                )
-              ) 
-              (if (= left true) 
-                ;(commute player/streams assoc k {"x:" (- x 5) "y:" y}) 
-                (collision k (- x 5) y radius)
-                (if (= right true) 
-                  ;(commute player/streams assoc k {"x:" (+ x 5) "y:" y})  
-                  ;(commute player/streams assoc k {"x:" x "y:" y}) 
-                  (collision k (+ x 5) y radius)
-                  (collision k x y radius)
-                )
-              ) 
-            )
           )
+        )
+      )
+    )
+  )
+)
+
+;спавн красных точек
+(defn spawnred [width height id]
+  (dosync
+    (let [
+        x (rand-int width)
+        y (rand-int height)
+        redt (@player/streams "red:")
+      ]
+      (commute player/streams assoc 
+        "red:" 
+        (assoc 
+          redt 
+          (str id ":")
+          {"x:" x "y:" y}
         )
       )
     )

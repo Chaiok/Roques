@@ -55,10 +55,18 @@
   (binding [*in* (io/reader in)
             *out* (io/writer out)
             *err* (io/writer System/err)]
-      (loop [] 
-        (dosync (print (commute player/streams merge nil))(flush))   
-        (commands/movingall 10) 
-        (Thread/sleep 20) (recur)
+      (let [f (atom 1)]
+        (loop [] 
+          (dosync (print (commute player/streams merge nil))(flush))   
+          (commands/movingall 10) 
+          (commands/spawnred 800 600 @f) 
+          (swap! f inc)
+          (if (= @f 100)
+            (reset! f 1)
+          )
+          (Thread/sleep 20) 
+          (recur)
+        )
       )
 ))
 

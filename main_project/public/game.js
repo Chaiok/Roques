@@ -74,7 +74,6 @@ canvas.height = 600;
 var context = canvas.getContext('2d');
 socket.on('state', function (players) {
     context.clearRect(0, 0, 800, 600);
-    context.fillStyle = 'green';
     var decoder = new TextDecoder("utf-8");
     var per = decoder.decode(new Uint8Array(players.msg));
     console.log("per:" + per);
@@ -88,9 +87,21 @@ socket.on('state', function (players) {
         for (var coord in obj[key]) {
             //console.log(coord, obj[key][coord])
         }
-        context.beginPath();
-        context.arc(obj[key].x, obj[key].y, 10, 0, 2 * Math.PI);
-        context.fill();
+        if(key != "red")
+        {
+            context.fillStyle = 'green';
+            context.beginPath();
+            context.arc(obj[key].x, obj[key].y, 10, 0, 2 * Math.PI);
+            context.fill();
+        }
+        else {
+            context.fillStyle = 'red';
+            for (var redt in obj[key]) {
+                context.beginPath();
+                context.arc(obj[key][redt].x, obj[key][redt].y, 5, 0, 2 * Math.PI);
+                context.fill();
+            }
+        }
     }
 
 });
