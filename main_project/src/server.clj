@@ -55,20 +55,34 @@
   (binding [*in* (io/reader in)
             *out* (io/writer out)
             *err* (io/writer System/err)]
-      (let [f (atom 1)]
+    
+    
+    (let [f (atom 1) i (atom 1)]
+      (
+       (
         (loop [] 
-          (dosync (print (commute player/streams merge nil))(flush))   
-          (commands/movingall 10) 
-          (commands/spawnred 800 600 @f) 
-          (swap! f inc)
-          (if (= @f 100)
-            (reset! f 1)
-          )
-          (Thread/sleep 20) 
-          (recur)
-        )
+         (dosync (print (commute player/streams merge nil)) (flush))   
+         (commands/movingall 10)
+         (commands/spawnred 800 600 @f)
+         (swap! f inc)
+          (if (< @i 80)
+           (
+                     (commands/spawnWalls 800 600 @i) 
+            (swap! i inc)
+           )
+           )
+         (if (= @f 150)
+           (reset! f 1)
+           )
+         (Thread/sleep 20) 
+         (recur)
+         )
+       )
+       )
       )
-))
+    
+
+    ))
 
 (defn -main [& args]
 (println "hello")

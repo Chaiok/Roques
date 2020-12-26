@@ -16,18 +16,39 @@
     ]
     (doseq [[k v] players]
       (if (not= k "red:")
+      (if (not= k "block:")
         (if (not= player k)
           (let [
-              x (get v "x:")
+              x (get v "x:") 
               y (get v "y:")
             ]
-            (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ radius radius) (+ radius radius)))
+            (if (< (+ (* (- px x) (- px x))
+                      (* (- py y) (- py y)))
+                   (* (+ radius radius) (+ radius radius)))
               (
                 swap! f inc
               )
             )
           )
         )
+       )
+      (if (not= k "block:")
+        (if (not= k "red:")
+        (if (not= player k)
+          (let [
+              x (get v "x:")
+              y (get v "y:")
+            ]
+            (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) 
+                   (* (+ radius radius) (+ radius radius)))
+              (
+                swap! f inc
+              )
+            )
+          )
+        )
+      )
+      )
       )
     )
     (if (= @f 0)
@@ -93,6 +114,7 @@
         ]
       (doseq [[k v] players]
         (if (not= k "red:")
+          (if (not= k "block:")
           (let [
             x (get v "x:")
             y (get v "y:")
@@ -136,6 +158,7 @@
               )
             )
           )
+          )
         )
       )
     )
@@ -143,6 +166,25 @@
 )
 
 ;спавн красных точек
+
+(defn spawnWalls [width height id]
+  (dosync
+    (let [
+        x (rand-int width)
+        y (rand-int height)
+        blockt (@player/streams "block:")
+      ]
+      (commute player/streams assoc 
+        "block:" 
+        (assoc 
+          blockt
+          (str id ":")
+          {"x:" x "y:" y}
+        )
+      )
+    )
+  )
+)
 (defn spawnred [width height id]
   (dosync
     (let [
