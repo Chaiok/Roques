@@ -5,8 +5,8 @@
           [commands :as commands]
           [clojure.string :as str]))
 
-(def port (* 3 1111))
-(def sideport (* 4 1111))
+(def port (* 3 1112))
+(def sideport (* 4 1112))
 (def i 1)
 
 (defn mire-handle-client [in out]
@@ -67,14 +67,14 @@
          (commands/movingall 10)
          (commands/spawnred 800 600 @f)
          (swap! f inc)
-          (if (< @i 80)
+          (if (< @i 4)
            (
                      (commands/spawnWalls 800 600 @i) 
-            (swap! i inc)
+                     (swap! i inc)
            )
            )
          (if (= @f 100)
-           (reset! f 1)
+           (reset! f 99)
            )
          (Thread/sleep 20) 
          (recur)
