@@ -1,4 +1,5 @@
 var socket = io();
+let MapOfPlayers = new Map();
 var $all_messages = $("#all_mess");
 $('form').submit(function () {
     socket.emit('chat message', $('#m').val());
@@ -66,7 +67,18 @@ class Formate {
         return JSON.parse(this.string.replace(this.regExp, '"$1": $2'));
     }
 }
-
+//функция отрисовки значений в таблице очков
+function updateTable() {
+    var table = document.getElementById('table');
+    var faucet1 = 1;
+    var tr = document.createElement("tr");
+    MapOfPlayers.forEach((value, key, map) => {
+        if (faucet1 == 1) { 
+            tr.innerHTML = `<td>${value}</td> <td>${key}</td>`;
+            table.appendChild(tr);
+        }
+    });        
+};
 //обработка графики и state
 var canvas = document.getElementById('canvas');
 canvas.width = 800;
@@ -77,16 +89,12 @@ socket.on('state', function (players) {
     var decoder = new TextDecoder("utf-8");
     var per = decoder.decode(new Uint8Array(players.msg));
     console.log("per:" + per);
-
     const value = new Formate(per);
     //console.log(value.validJSON);
     var obj = value.validJSON;
     //console.log(obj);
     for (var key in obj) {
-        //console.log(key, obj[key])
-        for (var coord in obj[key]) {
-            //console.log(coord, obj[key][coord])
-        }
+        MapOfPlayers.set(key,points)
         if(key != "red" && key != "block")
         {
             context.fillStyle = 'green';
@@ -106,10 +114,9 @@ socket.on('state', function (players) {
             context.fillStyle = 'blue';
             for (var redt in obj[key]) {
                 context.beginPath();
-                context.rect(obj[key][redt].x-15, obj[key][redt].y-15, 30, 30);
+                context.rect(obj[key][redt].x, obj[key][redt].y, 30, 30);
                 context.fill();
             }
         }
     }
-
 });
