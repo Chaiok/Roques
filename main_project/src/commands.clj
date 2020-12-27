@@ -16,46 +16,56 @@
     ]
     (doseq [[k v] players]
       (if (not= k "red:")
-      (if (not= k "block:")
-        (if (not= player k)
-          (let [
-              x (get v "x:") 
-              y (get v "y:")
-            ]
-            (if (< (+ (* (- px x) (- px x))
-                      (* (- py y) (- py y)))
-                   (* (+ radius radius) (+ radius radius)))
-              (
-                swap! f inc
-              )
-            )
-          )
-        )
-       )
-      (if (not= k "block:")
-        (if (not= k "red:")
-        (if (not= player k)
-          (let [
-              x (get v "x:")
-              y (get v "y:")
-            ]
-            (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) 
-                   (* (+ radius radius) (+ radius radius)))
-              (
-                swap! f inc
+        (if (not= k "block:")
+          (if (not= player k)
+            (let [
+                x (get v "x:")
+                y (get v "y:")
+              ]
+              (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ radius radius) (+ radius radius)))
+                (
+                  swap! f inc
+                )
               )
             )
           )
         )
       )
-      )
+    )
+    (doseq [[k v] (@player/streams "red:")]
+      (let [
+        x (get v "x:")
+        y (get v "y:")
+        ]
+        (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ 5 5) (+ 5 5)))
+          (
+            (commute player/powers assoc player
+            {:power true})
+            (commute player/streams update-in ["red:"] dissoc k )
+            (commute player/colorOchki assoc player {:ochki (+ (get (@player/colorOchki player ) :ochki) 1) } )
+          )
+        )
+      )  
+    )
+    (doseq [[k v] (@player/streams "block:")]
+      (let [
+        x (get v "x:")
+        y (get v "y:")
+        ]
+        (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ radius radius) (+ radius radius)))
+          (
+            swap! f inc
+          )
+        )
       )
     )
     (if (= @f 0)
-      (commute player/streams assoc player {"x:" px "y:" py})
+      ;(commute player/streams assoc player {"x:" px "y:" py "ochki:" (+ (get (@player/streams player ) "ochki:") 1) })
+      (commute player/streams assoc player {"x:" px "y:" py "ochki:" (get (@player/colorOchki player ) :ochki) })
     )
   )
 )
+
 
 ;Command functions
 (defn execute [input]
@@ -198,6 +208,23 @@
           redt 
           (str id ":")
           {"x:" x "y:" y}
+        )
+      )
+    )
+  )
+)
+;стенка
+(defn stenka [width height id]
+  (dosync
+    (let [
+        redt (@player/streams "block:")
+      ]
+      (commute player/streams assoc 
+        "block:" 
+        (assoc 
+          redt 
+          (str id ":")
+          {"x:" width "y:" height}
         )
       )
     )

@@ -119,5 +119,4 @@ socket.on('state', function (players) {
             }
         }
     }
-
 });
