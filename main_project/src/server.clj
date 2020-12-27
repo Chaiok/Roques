@@ -32,7 +32,7 @@
 
     (let [p (-> (
           (loop [] 
-            ;(commands/moving) 
+             
             (Thread/sleep 20) (recur)
           )
         ) future )]
@@ -67,7 +67,7 @@
          (swap! f inc)
           (if (< @i 80)
            (
-                     (commands/spawnWalls 800 600 @i) 
+            (commands/spawnWalls 800 600 @i) 
             (swap! i inc)
            )
            )
