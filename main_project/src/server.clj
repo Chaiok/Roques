@@ -32,6 +32,8 @@
       {:power false})
       (commute player/colorOchki assoc (str "player" player/*id* ":")
       {:ochki 0})
+      (commute player/playermove assoc (str "player" player/*id* ":")
+      {:move 5})
     )
 
     (let [p (-> (
@@ -61,7 +63,7 @@
             *err* (io/writer System/err)]
     
     
-    (let [f (atom 1) y1 (atom 600) y2 (atom 600) x1 (atom 800) x2 (atom 800)]
+    (let [f (atom 1) i (atom 300) y1 (atom 600) y2 (atom 600) x1 (atom 800) x2 (atom 800)]
       (
        (
         (loop []
@@ -81,14 +83,19 @@
             (commands/stenka @x2 600 (str @x2 "h4")) 
             (reset! x2 (- @x2 20))
           )
+            (while (pos? @i)
+            (commands/spawnWalls 800 600 @i) 
+            (reset! i (- @i 20))
+          ) 
           
          (dosync (print (commute player/streams merge nil)) (flush))   
          (commands/movingall 10)
          (commands/spawnred 800 600 @f)
          (swap! f inc)
-         (if (= @f 100)
+         
+         (if (= @f 150)
            (reset! f 1)
-         )
+           )
          (Thread/sleep 20) 
          (recur)
          )

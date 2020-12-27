@@ -12,6 +12,7 @@
 
 (def powers (ref {}))
 (def colorOchki (ref {}))
+(def playermove (ref {}))
 (def streams (ref {"red:" {} "block:" {}} ))
 (def states (ref {}))
 (def streamsinfo (deref streams))
