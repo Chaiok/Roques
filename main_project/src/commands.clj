@@ -48,8 +48,6 @@
       )  
     )
     (doseq [[k v] (@player/streams "block:")]
-      ;(print (str "kkk" k))(flush)
-      ;(print (str "vvv" v))(flush)
       (let [
         x (get v "x:")
         y (get v "y:")
@@ -62,7 +60,8 @@
       )
     )
     (if (= @f 0)
-      (commute player/streams assoc player {"x:" px "y:" py})
+      ;(commute player/streams assoc player {"x:" px "y:" py "ochki:" (+ (get (@player/streams player ) "ochki:") 1) })
+      (commute player/streams assoc player {"x:" px "y:" py "ochki:" (get (@player/colorOchki player ) :ochki) })
     )
   )
 )

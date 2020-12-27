@@ -5,8 +5,8 @@
           [commands :as commands]
           [clojure.string :as str]))
 
-(def port (* 3 1111))
-(def sideport (* 4 1111))
+(def port (* 3 1112))
+(def sideport (* 4 1112))
 (def i 1)
 
 (defn mire-handle-client [in out]
@@ -25,7 +25,7 @@
     (def i (+ i 1))
     (dosync
       (commute player/streams assoc (str "player" player/*id* ":")
-      {"x:" player/*x* "y:" player/*y*})
+      {"x:" player/*x* "y:" player/*y* "ochki:" 0})
       (commute player/states assoc (str "player" player/*id* ":")
       {:up false :down false :left false :right false})
       (commute player/powers assoc (str "player" player/*id* ":")
@@ -37,7 +37,7 @@
     (let [p (-> (
           (loop [] 
             ;(commands/moving) 
-            (Thread/sleep 20) (recur)
+            (Thread/sleep 100) (recur)
           )
         ) future )]
     (-> 
