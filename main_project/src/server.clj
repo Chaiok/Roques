@@ -28,6 +28,8 @@
       {"x:" player/*x* "y:" player/*y*})
       (commute player/states assoc (str "player" player/*id* ":")
       {:up false :down false :left false :right false})
+      (commute player/powers assoc (str "player" player/*id* ":")
+      {:power false})
     )
 
     (let [p (-> (

@@ -32,6 +32,20 @@
         )
       )
     )
+    (doseq [[k v] (@player/streams "red:")]
+      (let [
+        x (get v "x:")
+        y (get v "y:")
+        ]
+        (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ 5 5) (+ 5 5)))
+          (
+            (commute player/powers assoc player
+            {:power true})
+            (commute player/streams update-in ["red:"] dissoc k )
+          )
+        )
+      )
+    )
     (doseq [[k v] (@player/streams "block:")]
       ;(print (str "kkk" k))(flush)
       ;(print (str "vvv" v))(flush)
