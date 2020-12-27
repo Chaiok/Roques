@@ -106,7 +106,7 @@ socket.on('state', function (players) {
             context.fillStyle = 'blue';
             for (var redt in obj[key]) {
                 context.beginPath();
-                context.rect(obj[key][redt].x, obj[key][redt].y, 30, 30);
+                context.rect(obj[key][redt].x-15, obj[key][redt].y-15, 30, 30);
                 context.fill();
             }
         }
