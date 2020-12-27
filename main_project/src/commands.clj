@@ -32,8 +32,7 @@
         )
       )
     )
-    
-  (doseq [[k v] (@player/streams "red:")]
+    (doseq [[k v] (@player/streams "red:")]
       (let [
         x (get v "x:")
         y (get v "y:")
@@ -44,12 +43,10 @@
             {:power true})
             (commute player/streams update-in ["red:"] dissoc k )
             (print (str (commute player/colorOchki assoc player {:ochki (+ (get (@player/colorOchki player ) :ochki) 1) } ) "test16") )
-            
           )
         )
       )  
     )
-
     (doseq [[k v] (@player/streams "block:")]
       ;(print (str "kkk" k))(flush)
       ;(print (str "vvv" v))(flush)

@@ -30,7 +30,7 @@
       {:up false :down false :left false :right false})
       (commute player/powers assoc (str "player" player/*id* ":")
       {:power false})
-       (commute player/colorOchki assoc (str "player" player/*id* ":")
+      (commute player/colorOchki assoc (str "player" player/*id* ":")
       {:ochki 0})
     )
 
