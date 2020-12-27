@@ -28,6 +28,8 @@
       {"x:" player/*x* "y:" player/*y*})
       (commute player/states assoc (str "player" player/*id* ":")
       {:up false :down false :left false :right false})
+      (commute player/powers assoc (str "player" player/*id* ":")
+      {:power false})
     )
 
     (let [p (-> (
@@ -71,7 +73,7 @@
             (swap! i inc)
            )
            )
-         (if (= @f 150)
+         (if (= @f 100)
            (reset! f 1)
            )
          (Thread/sleep 20) 
