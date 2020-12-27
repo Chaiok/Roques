@@ -42,7 +42,7 @@
             (commute player/powers assoc player
             {:power true})
             (commute player/streams update-in ["red:"] dissoc k )
-            (print (str (commute player/colorOchki assoc player {:ochki (+ (get (@player/colorOchki player ) :ochki) 1) } ) "test16") )
+            (commute player/colorOchki assoc player {:ochki (+ (get (@player/colorOchki player ) :ochki) 1) } )
           )
         )
       )  
