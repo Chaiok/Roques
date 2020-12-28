@@ -79,6 +79,12 @@ function updateTable() {
         }
     });        
 };
+function setColor(x)
+{
+ if (x==1) return "black";
+ if (x==2) return "orange";
+ return "green";
+}
 //обработка графики и state
 var canvas = document.getElementById('canvas');
 canvas.width = 800;
@@ -97,7 +103,7 @@ socket.on('state', function (players) {
         MapOfPlayers.set(key,points)
         if(key != "red" && key != "block")
         {
-            context.fillStyle = 'green';
+            context.fillStyle = setColor(obj[key].color);
             context.beginPath();
             context.arc(obj[key].x, obj[key].y, 10, 0, 2 * Math.PI);
             context.fill();

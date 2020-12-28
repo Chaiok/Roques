@@ -25,7 +25,7 @@
     (def i (+ i 1))
     (dosync
       (commute player/streams assoc (str "player" player/*id* ":")
-      {"x:" player/*x* "y:" player/*y* "ochki:" 0})
+      {"x:" player/*x* "y:" player/*y* "ochki:" 0 "color:" 0})
       (commute player/states assoc (str "player" player/*id* ":")
       {:up false :down false :left false :right false})
       (commute player/powers assoc (str "player" player/*id* ":")
