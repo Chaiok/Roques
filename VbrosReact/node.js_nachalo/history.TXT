@@ -1,4 +1,0 @@
-npm init
-npm install ejs --save
-npm install socket.io
-npm install express
