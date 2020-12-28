@@ -60,6 +60,19 @@
         y (get v "y:")
         ]
         (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ radius radius) (+ radius radius)))
+          (if (< px 40 )
+            (commute player/streams assoc player {"x:" (+ px 100) "y:" py "ochki:" (get (@player/colorOchki player ) :ochki) })
+            (if (> px 760)
+              (commute player/streams assoc player {"x:" (- px 100) "y:" py "ochki:" (get (@player/colorOchki player ) :ochki) })
+              (if (> py 560)
+                (commute player/streams assoc player {"x:" px "y:" (- py 100) "ochki:" (get (@player/colorOchki player ) :ochki) })
+                (commute player/streams assoc player {"x:" px "y:" (+ py 100) "ochki:" (get (@player/colorOchki player ) :ochki) })
+              )
+            )
+          )
+            ;(and (if (< px 100 ) ) (if (> py 500 ) ))
+        )
+        (if (< (+ (* (- px x) (- px x)) (* (- py y) (- py y))) (* (+ radius radius) (+ radius radius)))
           (
             swap! f inc
           )
