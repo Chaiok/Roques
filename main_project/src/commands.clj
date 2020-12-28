@@ -43,11 +43,11 @@
             {:power true})
             (commute player/streams update-in ["red:"] dissoc k )
             (if (= true true)
-              (
+              ;(
               (commute player/colorOchki assoc player {:ochki (+ (get (@player/colorOchki player ) :ochki) 1) } )
-             ;увеличение скорости с каждым съеденным объектом
-             ;(commute player/playermove assoc player {:move (+ (get (@player/playermove player ) :move) 1) } )
-              )
+              ;увеличение скорости с каждым съеденным объектом
+              ;(commute player/playermove assoc player {:move (+ (get (@player/playermove player ) :move) 1) } )
+              ;)
             ) 
             
           )

@@ -110,11 +110,11 @@ socket.on('state', function (players) {
                 context.fill();
             }
         }
-        else {
+        else if(key == "block") {
             context.fillStyle = 'blue';
             for (var redt in obj[key]) {
                 context.beginPath();
-                context.rect(obj[key][redt].x, obj[key][redt].y, 30, 30);
+                context.arc(obj[key][redt].x, obj[key][redt].y, 10, 0, 2 * Math.PI);
                 context.fill();
             }
         }
