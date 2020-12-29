@@ -98,6 +98,12 @@ function updateTableOchki() {
         }
     });      
 };
+function setColor(x)
+{
+ if (x==1) return "black";
+ if (x==2) return "orange";
+ return "green";
+}
 //обработка графики и state
 var canvas = document.getElementById('canvas');
 canvas.width = 800;
@@ -121,7 +127,7 @@ socket.on('state', function (players) {
                 updateTablePlayers();
             }
             updateTableOchki();
-            context.fillStyle = 'green';
+            context.fillStyle = setColor(obj[key].color);
             context.beginPath();
             context.arc(obj[key].x, obj[key].y, 10, 0, 2 * Math.PI);
             context.fill();
@@ -134,11 +140,11 @@ socket.on('state', function (players) {
                 context.fill();
             }
         }
-        else {
+        else if(key == "block") {
             context.fillStyle = 'blue';
             for (var redt in obj[key]) {
                 context.beginPath();
-                context.rect(obj[key][redt].x, obj[key][redt].y, 30, 30);
+                context.arc(obj[key][redt].x, obj[key][redt].y, 10, 0, 2 * Math.PI);
                 context.fill();
             }
         }
