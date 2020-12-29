@@ -5,8 +5,8 @@
           [commands :as commands]
           [clojure.string :as str]))
 
-(def port (* 3 1112))
-(def sideport (* 4 1112))
+(def port (* 3 1111))
+(def sideport (* 4 1111))
 (def i 1)
 
 (defn mire-handle-client [in out]

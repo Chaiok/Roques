@@ -68,16 +68,35 @@ class Formate {
     }
 }
 //функция отрисовки значений в таблице очков
-function updateTable() {
+function updateTablePlayers() {
     var table = document.getElementById('table');
-    var faucet1 = 1;
+    var tr = document.createElement("tr");
+    let isPositive=true;
+    MapOfPlayers.forEach((value, key, map) => {
+        for ( var i = 0; i < table.rows.length; i++ ) {
+            for ( var j = 0; j < table.rows[0].cells.length; j++ ){
+                if (table.rows[i].cells[0].innerHTML == key)
+                    isPositive=false
+            } 
+        }
+        if(isPositive==true){
+            tr.innerHTML = `<td>${key}</td> <td>${value}</td>`;
+            table.appendChild(tr); 
+        }
+        isPositive=true;
+    });
+}
+function updateTableOchki() {
+    var table = document.getElementById('table');
     var tr = document.createElement("tr");
     MapOfPlayers.forEach((value, key, map) => {
-        if (faucet1 == 1) { 
-            tr.innerHTML = `<td>${value}</td> <td>${key}</td>`;
-            table.appendChild(tr);
+        for ( var i = 0; i < table.rows.length; i++ ) {
+            for ( var j = 0; j < table.rows[0].cells.length; j++ ){
+                if (table.rows[i].cells[0].innerHTML == key)
+                table.rows[i].cells[1].innerHTML =  `<td>${value}</td>`            
+            } 
         }
-    });        
+    });      
 };
 //обработка графики и state
 var canvas = document.getElementById('canvas');
@@ -93,10 +112,15 @@ socket.on('state', function (players) {
     //console.log(value.validJSON);
     var obj = value.validJSON;
     //console.log(obj);
+    prevNumberOfPlayers=MapOfPlayers.size;
     for (var key in obj) {
-        MapOfPlayers.set(key,points)
         if(key != "red" && key != "block")
         {
+            MapOfPlayers.set(key,obj[key].ochki);
+            if(MapOfPlayers.size != prevNumberOfPlayers){
+                updateTablePlayers();
+            }
+            updateTableOchki();
             context.fillStyle = 'green';
             context.beginPath();
             context.arc(obj[key].x, obj[key].y, 10, 0, 2 * Math.PI);
@@ -119,4 +143,5 @@ socket.on('state', function (players) {
             }
         }
     }
+    //updateTable();
 });
